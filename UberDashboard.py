@@ -47,6 +47,8 @@ st.markdown("""
 @st.cache_data
 def load_data():
     df = pd.read_csv("uber.csv", encoding="latin-1")
+    if "Date" in df.columns:
+        df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     return df
 
 df = load_data()
