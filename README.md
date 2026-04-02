@@ -50,7 +50,7 @@ cd Uber-Analytics-Streamlit-App
 ### 2. Install Dependencies
 
 ```bash
-pip install -r requirements
+pip install -r requirements.txt
 ```
 
 Or install manually:
