@@ -141,10 +141,10 @@ if selected == "Dataset":
     # ── Row display ──
     st.subheader("📄 Dataset Table")
     row = st.slider("Rows to display", 10, max(10, len(filtered_df)), min(50, len(filtered_df)))
-    st.dataframe(filtered_df.head(row), use_container_width=True)
+    st.dataframe(filtered_df.head(row), width='stretch')
 
     if st.checkbox("Show Full Dataset"):
-        st.dataframe(filtered_df, use_container_width=True)
+        st.dataframe(filtered_df, width='stretch')
 
     st.divider()
 
@@ -157,7 +157,7 @@ if selected == "Dataset":
         st.subheader("🔢 Numeric Column Deep Dive")
         sel_num = st.multiselect("Select Numeric Columns", numeric_cols, default=numeric_cols[:3])
         if sel_num:
-            st.dataframe(filtered_df[sel_num].describe(), use_container_width=True)
+            st.dataframe(filtered_df[sel_num].describe(), width='stretch')
 
             # Distribution charts for selected numeric cols
             for col_name in sel_num[:3]:
@@ -167,7 +167,7 @@ if selected == "Dataset":
                     color_discrete_sequence=["#1DB954"]
                 )
                 fig.update_layout(bargap=0.1)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
 
     st.divider()
 
@@ -179,7 +179,7 @@ if selected == "Dataset":
         st.download_button(
             "⬇️ Download Filtered CSV",
             csv, "filtered_dataset.csv", "text/csv",
-            use_container_width=True
+            width='stretch'
         )
     with col2:
         st.caption(f"Will download **{len(filtered_df):,} rows** × **{len(filtered_df.columns)} cols**")
@@ -228,7 +228,7 @@ elif selected == "Overview":
             "Avg_Rating": "{:,.2f} / 5.0",           # ← removed $
             "Revenue Share %": "{:,.1f}%"            # ← removed $
         }).background_gradient(subset=["Revenue_Generated"], cmap="YlGnBu"),
-        use_container_width=True                      # ← fixed width
+        width='stretch'                      # ← fixed width
     )
 
     st.divider()
@@ -243,7 +243,7 @@ elif selected == "Overview":
             color_discrete_sequence=px.colors.qualitative.Bold
         )
         fig_rev.update_layout(showlegend=False)
-        st.plotly_chart(fig_rev, use_container_width=True)
+        st.plotly_chart(fig_rev, width='stretch')
 
     with col_chart2:
         fig_rating = px.bar(
@@ -268,14 +268,14 @@ elif selected == "Overview":
             eff_df.style
             .highlight_max(axis=0, color="#ffcccc")
             .highlight_min(axis=0, color="#ccffcc"),
-            use_container_width=True
+            width='stretch'
         )
 
     with col_can:
         st.subheader("❌ Cancellation Audit")
         status_count = df["Booking Status"].value_counts().to_frame(name="Count")
         status_count["Share %"] = (status_count["Count"] / total_rides * 100).round(1)
-        st.dataframe(status_count, use_container_width=True)
+        st.dataframe(status_count, width='stretch')
 
         fig_pie = px.pie(
             values=status_count["Count"],
@@ -284,7 +284,7 @@ elif selected == "Overview":
             hole=0.4,
             color_discrete_sequence=px.colors.qualitative.Set2
         )
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
 
     st.divider()
 
@@ -295,7 +295,7 @@ elif selected == "Overview":
     with pay_col:
         st.markdown("**Payment Method Preference**")
         pay_summary = (completed["Payment Method"].value_counts(normalize=True) * 100).round(1)
-        st.dataframe(pay_summary.rename("Usage %"), use_container_width=True)
+        st.dataframe(pay_summary.rename("Usage %"), width='stretch')
 
         fig_pay = px.pie(
             values=pay_summary.values,
@@ -303,7 +303,7 @@ elif selected == "Overview":
             title="Payment Methods",
             hole=0.35
         )
-        st.plotly_chart(fig_pay, use_container_width=True)
+        st.plotly_chart(fig_pay, width='stretch')
 
     with reason_col:
         st.markdown("**Top Cancellation Reasons**")
@@ -312,7 +312,7 @@ elif selected == "Overview":
         cust_reason.index = "Customer: " + cust_reason.index
         drv_reason.index = "Driver: " + drv_reason.index
         reason_df = pd.concat([cust_reason, drv_reason]).to_frame("Incident Count")
-        st.dataframe(reason_df, use_container_width=True)
+        st.dataframe(reason_df, width='stretch')
 
         fig_bar = px.bar(
             reason_df.reset_index(),
@@ -322,7 +322,7 @@ elif selected == "Overview":
             color_discrete_sequence=px.colors.qualitative.Antique
         )
         fig_bar.update_layout(showlegend=False, xaxis_tickangle=-20)
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width='stretch')
 
 
 # ══════════════════════════════════════════════
@@ -359,7 +359,7 @@ elif selected == "Ride Analytics":
             title="Revenue by Vehicle & Payment Method"
         )
         fig1.update_layout(margin=dict(t=40, l=0, r=0, b=0))
-        st.plotly_chart(fig1, use_container_width=True)          # ← fixed width
+        st.plotly_chart(fig1, width='stretch')          # ← fixed width
 
     with col2:
         st.subheader("🗺️ Revenue Treemap")
@@ -372,7 +372,7 @@ elif selected == "Ride Analytics":
             title="Revenue Distribution"
         )
         fig2.update_layout(margin=dict(t=40, l=0, r=0, b=0))    # ← removed hardcoded width=500
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
 
     st.divider()
 
@@ -404,7 +404,7 @@ elif selected == "Ride Analytics":
             title="Ride Distance vs Booking Value",
             trendline="ols"
         )
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width='stretch')
 
     st.divider()
 
@@ -428,7 +428,7 @@ elif selected == "Ride Analytics":
         link=dict(source=source, target=target, value=value)
     )])
     fig4.update_layout(height=500, font_size=13)
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, width='stretch')
 
     st.divider()
 
@@ -447,7 +447,7 @@ elif selected == "Ride Analytics":
         title="Avg Customer Rating by Vehicle & Payment Method",
         aspect="auto"
     )
-    st.plotly_chart(fig5, use_container_width=True)
+    st.plotly_chart(fig5, width='stretch')
 
 
 # ══════════════════════════════════════════════
@@ -478,7 +478,7 @@ elif selected == "Data Assistant":
                 labels={"x": "Booking Status", "y": "Ride Count"},
                 title="Ride Distribution by status"
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
         elif "revenue" in q:
             revenue = completed.groupby("Vehicle Type")["Booking Value"].sum()
@@ -490,7 +490,7 @@ elif selected == "Data Assistant":
                 title="Revenue Distribution by Vehicle Type",
                 labels={"x": "Vehicle Type", "y": "Revenue"}
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
         elif "distance" in q:
             fig = px.scatter(
